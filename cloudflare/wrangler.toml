@@ -1,0 +1,56 @@
+name = "hachihi-quiz-api"
+main = "worker.ts"
+compatibility_date = "2026-03-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ==============================================================================
+# 1. CLOUDFLARE D1 DATABASE BINDING (Versioned SQL at Edge)
+# ==============================================================================
+[[d1_databases]]
+binding = "DB"
+database_name = "hachihi-quiz-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+# ==============================================================================
+# 2. CLOUDFLARE DURABLE OBJECTS BINDING (Real-time Live Rooms)
+# ==============================================================================
+[durable_objects]
+bindings = [
+  { name = "LIVE_ROOMS", class_name = "LiveRoomDurableObject" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["LiveRoomDurableObject"]
+
+# ==============================================================================
+# 3. PRODUCTION ENVIRONMENT DEFAULTS
+# ==============================================================================
+[vars]
+ENVIRONMENT = "production"
+MAX_ROOM_CAPACITY = "50"
+ALLOWED_WORKSPACE_DOMAINS = "hachihi.vn,gmail.com"
+GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+
+# ==============================================================================
+# 4. MULTI-ENVIRONMENT CONFIGURATION: STAGING
+# Deploy via: wrangler deploy --env staging
+# ==============================================================================
+[env.staging]
+name = "hachihi-quiz-api-staging"
+vars = { ENVIRONMENT = "staging", MAX_ROOM_CAPACITY = "50", ALLOWED_WORKSPACE_DOMAINS = "hachihi.vn,gmail.com" }
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "hachihi-quiz-db-staging"
+database_id = "11111111-1111-1111-1111-111111111111"
+migrations_dir = "migrations"
+
+# ==============================================================================
+# 5. MULTI-ENVIRONMENT CONFIGURATION: PRODUCTION
+# Deploy via: wrangler deploy --env production
+# ==============================================================================
+[env.production]
+name = "hachihi-quiz-api-production"
+vars = { ENVIRONMENT = "production", MAX_ROOM_CAPACITY = "50", ALLOWED_WORKSPACE_DOMAINS = "hachihi.vn,gmail.com" }
+# routes = [{ pattern = "quiz.hachihi.vn/*", zone_name = "hachihi.vn" }]

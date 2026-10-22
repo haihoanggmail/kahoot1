@@ -1,0 +1,6 @@
+{
+  "name": "HACHIHI Quiz - Kahoot Alternative",
+  "description": "Nền tảng thi đấu trắc nghiệm trực tiếp và tự luyện HACHIHI Quiz thay thế Kahoot với Google Workspace SSO, phòng 50 người và kiến trúc Cloudflare miễn phí.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
